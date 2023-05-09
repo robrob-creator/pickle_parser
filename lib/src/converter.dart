@@ -39,7 +39,7 @@ Future<void> pumpUntilFound(
       Timer(timeout, () => throw TimeoutException('Pump until has timed out'));
   while (timerDone != true) {
     await tester.pump();
-    print(finder);
+
     final found = tester.any(finder);
     if (found) {
       timerDone = true;
@@ -118,19 +118,21 @@ Future<void> getCucumberStepTestCode(String step, WidgetTester tester) async {
         String element = text.substring(6);
         if (element.startsWith('key:')) {
           String key = element.substring(4);
-          await pumpUntilFound(tester, find.byKey(Key(key)));
+          await pumpUntilFound(tester, find.byKey(Key(key)).first);
           expect(find.byKey(Key(key)), findsOneWidget);
         } else if (element.startsWith('type:')) {
           Type type = await getType(element.substring(5));
-          await pumpUntilFound(tester, find.byType(type));
-          expect(find.byType(type), findsOneWidget);
+          await pumpUntilFound(tester, find.byType(type).first);
+          expect(find.byType(type).first, findsOneWidget);
         } else {
-          await pumpUntilFound(tester, find.text(element));
-          expect(find.text(element), findsOneWidget);
+          await pumpUntilFound(tester, find.text(element).first);
+          expect(find.text(element).first, findsOneWidget);
         }
       } else if (text.startsWith('I refresh')) {
         await pumpUntilFound(tester, pullToRefreshFinder);
         await tester.drag(pullToRefreshFinder, const Offset(0.0, 200.0));
+      } else if (text.startsWith('I settle')) {
+        await tester.pumpAndSettle();
       } else if (text.startsWith('I trigger enter')) {
         await tester.sendKeyEvent(LogicalKeyboardKey.enter);
       } else if (text.startsWith('I tap ')) {
@@ -200,8 +202,8 @@ Future<void> getCucumberStepTestCode(String step, WidgetTester tester) async {
             const Offset(0, -500),
           );
         }
-      } else if (step.startsWith('I scroll')) {
-        String direction = step.substring(8).trim().toLowerCase();
+      } else if (step.startsWith('I scroll ')) {
+        String direction = step.substring(9).trim().toLowerCase();
         if (direction == 'up') {
           final gesture = await tester.startGesture(const Offset(0, 300));
           await gesture.moveBy(const Offset(0, 300));
@@ -222,19 +224,21 @@ Future<void> getCucumberStepTestCode(String step, WidgetTester tester) async {
         String element = text.substring(6);
         if (element.startsWith('key:')) {
           String key = element.substring(4);
-          await pumpUntilFound(tester, find.byKey(Key(key)));
-          expect(find.byKey(Key(key)), findsOneWidget);
+          await pumpUntilFound(tester, find.byKey(Key(key)).first);
+          expect(find.byKey(Key(key)).first, findsOneWidget);
         } else if (element.startsWith('type:')) {
           Type type = await getType(element.substring(5));
-          await pumpUntilFound(tester, find.byType(type));
-          expect(find.byType(type), findsOneWidget);
+          await pumpUntilFound(tester, find.byType(type).first);
+          expect(find.byType(type).first, findsOneWidget);
         } else {
           await pumpUntilFound(tester, find.text(element));
-          expect(find.text(element), findsOneWidget);
+          expect(find.text(element).first, findsOneWidget);
         }
       } else if (text.startsWith('I refresh')) {
         await pumpUntilFound(tester, pullToRefreshFinder);
         await tester.drag(pullToRefreshFinder, const Offset(0.0, 200.0));
+      } else if (text.startsWith('I settle')) {
+        await tester.pumpAndSettle();
       } else if (text.startsWith('I trigger enter')) {
         await tester.sendKeyEvent(LogicalKeyboardKey.enter);
       } else if (text.startsWith('I tap ')) {
@@ -304,8 +308,8 @@ Future<void> getCucumberStepTestCode(String step, WidgetTester tester) async {
             const Offset(0, -500),
           );
         }
-      } else if (step.startsWith('I scroll')) {
-        String direction = step.substring(8).trim().toLowerCase();
+      } else if (step.startsWith('I scroll ')) {
+        String direction = step.substring(9).trim().toLowerCase();
         if (direction == 'up') {
           final gesture = await tester.startGesture(const Offset(0, 300));
           await gesture.moveBy(const Offset(0, 300));
