@@ -1,13 +1,15 @@
 name: pickle_parser
 description: A starting point for Dart libraries or applications.
 version: 1.0.0
-# repository: https://github.com/my_org/my_repo
+repository: https://github.com/robrob-creator/pickle_parser.git
 
 environment:
-  sdk: ">=2.19.5 <3.0.0"
+  sdk: ">=2.19.5 <4.0.0"
 
 dependencies:
   flutter:
+    sdk: flutter
+  flutter_test:
     sdk: flutter
 
 dev_dependencies:
@@ -16,6 +18,4 @@ dev_dependencies:
   flutter_driver:
     sdk: flutter
   integration_test:
-    sdk: flutter
-  flutter_test:
     sdk: flutter

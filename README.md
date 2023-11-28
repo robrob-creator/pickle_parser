@@ -1,39 +1,59 @@
-<!-- 
+<!--
 This README describes the package. If you publish this package to pub.dev,
 this README's contents appear on the landing page for your package.
 
 For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages). 
+[writing package pages](https://dart.dev/guides/libraries/writing-package-pages).
 
 For general information about developing packages, see the Dart guide for
 [creating packages](https://dart.dev/guides/libraries/create-library-packages)
 and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages). 
+[developing packages and plugins](https://flutter.dev/developing-packages).
 -->
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+# Pickle Parser
 
-## Features
+A Flutter package for parsing pickle files and executing Cucumber steps in widget tests.
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+### Overview
 
-## Getting started
+The Pickle Parser package provides a convenient way to parse pickle files and execute Cucumber steps in Flutter widget tests. It includes a pickleParser function that takes a WidgetTester and the directory of the pickle file as input, then iterates through the file's lines, executing Cucumber steps and logging the results.
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+### Installation
 
-## Usage
+To use this package, add pickle_parser as a dependency in your pubspec.yaml file:
+yaml
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder. 
+dependencies: pickle_parser: ^1.0.0
+Then run:
+bash
+
+flutter pub get
+
+### Features
+
+Cucumber Steps Execution: The package executes Cucumber steps defined in the pickle file within a Flutter widget test.
+Logging: Successful and failed steps are logged using Dart's dart:developer package, providing visibility into the test execution process.
+Issues and Contributions
+If you encounter any issues or have suggestions for improvements, feel free to create an issue on the GitHub repository.
+Pull requests are welcome!
+
+### License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+### Usage
+
+Here's an example of how to use the pickle parser in your tests:
 
 ```dart
-const like = 'sample';
+import 'package:flutter/services.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:pickle_parser/pickle_parser.dart';
+
+void main() {
+  testWidgets('Pickle Parser Test', (WidgetTester tester) async {
+    await pickleParser(tester, 'path/to/your/pickle/file.feature');
+  });
+}
 ```
-
-## Additional information
-
-TODO: Tell users more about the package: where to find more information, how to 
-contribute to the package, how to file issues, what response they can expect 
-from the package authors, and more.
