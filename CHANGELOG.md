@@ -1,12 +1,7 @@
-## 1.0.3
+## 1.0.4
 
-- Fixed typos in logging ("sucess" -> "success")
-- Fixed duplicate logging in error handling
-- Added comprehensive dartdoc documentation
-- Added unit tests for core functionality
-- Added example usage
-- Cleaned up unnecessary dependencies
-- Improved package description
+- Added Buy Me a Coffee support link to README
+- Updated documentation formatting
 
 ## 1.0.3
 

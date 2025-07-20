@@ -1,6 +1,6 @@
 name: pickle_parser
 description: A Flutter package for parsing pickle files and executing Cucumber steps in widget tests.
-version: 1.0.3
+version: 1.0.4
 repository: https://github.com/robrob-creator/pickle_parser.git
 
 environment:
