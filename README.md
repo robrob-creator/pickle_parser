@@ -910,6 +910,12 @@ flutter pub get
 flutter test
 ```
 
+## ☕ Support This Project
+
+If you find this package helpful and want to support its development, consider buying me a coffee! Your support helps maintain and improve this open-source project.
+
+[![Buy Me A Coffee](https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png)](https://www.buymeacoffee.com/robertcumahig)
+
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
