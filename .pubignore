@@ -1,0 +1,25 @@
+# Build directories
+
+build/
+.dart_tool/
+
+# Generated test files (examples only)
+
+test/generated/
+test/generated_new/
+
+# Flutter specific
+
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+
+# IDE
+
+.vscode/
+.idea/
+
+# OS
+
+.DS_Store
+Thumbs.db

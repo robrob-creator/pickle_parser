@@ -1,6 +1,10 @@
-/// Support for doing something awesome.
+/// A Flutter package for parsing pickle files and executing Cucumber steps in widget tests.
 ///
-/// More dartdocs go here.
+/// This library provides functionality to parse Gherkin/Cucumber pickle files
+/// and execute the corresponding test steps using Flutter's widget testing framework.
+///
+/// The main entry point is the [pickleParser] function which takes a [WidgetTester]
+/// and the path to a pickle file, then executes the Cucumber steps defined in the file.
 library pickle_parser;
 
 export 'src/converter.dart';
