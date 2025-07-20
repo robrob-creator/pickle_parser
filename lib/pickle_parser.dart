@@ -9,3 +9,4 @@ library pickle_parser;
 
 export 'src/converter.dart';
 export 'src/parser.dart';
+export 'src/custom_steps.dart';

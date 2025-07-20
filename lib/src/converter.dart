@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'custom_steps.dart';
 
 /// Pumps the widget tree for the specified number of seconds.
 ///
@@ -182,9 +183,17 @@ Future<Type> getType(String type) async {
 ///
 /// Parses Gherkin/Cucumber step definitions and executes the corresponding
 /// widget test actions using the provided [WidgetTester].
+///
+/// First attempts to execute any registered custom steps, then falls back
+/// to built-in step implementations if no custom handler is found.
 Future<void> getCucumberStepTestCode(String step, WidgetTester tester) async {
   // Remove any leading/trailing whitespace from the step
   step = step.trim();
+
+  // Try custom steps first
+  if (await CustomStepRegistry().tryExecuteCustomStep(step, tester)) {
+    return; // Custom step was handled successfully
+  }
 
   // Assume all steps are "When" steps and use the full text as the "text" component
   String keyword = 'When';

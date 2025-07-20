@@ -1,3 +1,25 @@
+## 1.1.0
+
+### Major New Features
+
+- 🔧 **Custom Steps**: Added comprehensive support for custom step implementations
+  - `registerCustomStep()` - Register exact text match steps
+  - `registerCustomStepPattern()` - Register regex pattern steps
+  - `registerCustomStepTemplate()` - Register template-based steps with placeholders
+  - `CustomStepRegistry` - Full registry management for advanced scenarios
+  - Priority system: Custom steps checked first, fallback to built-in steps
+  - Comprehensive test suite and documentation
+
+### Improvements
+
+- 📖 **Enhanced Documentation**: Added detailed custom steps guide with examples
+- 🏗️ **Better Architecture**: Modular step processing with extensibility support
+- ✅ **Feature Completeness**: Addressed major limitation of no custom step support
+
+### Breaking Changes
+
+- None - all changes are backward compatible
+
 ## 1.0.4
 
 - Added Buy Me a Coffee support link to README

@@ -11,6 +11,7 @@ A comprehensive Flutter package for parsing pickle/Gherkin files and executing C
 - [Quick Start](#quick-start)
 - [Supported Gherkin Syntax](#supported-gherkin-syntax)
 - [Element Selectors](#element-selectors)
+- [Custom Steps](#custom-steps)
 - [Complete Step Reference](#complete-step-reference)
 - [Usage Examples](#usage-examples)
 - [Limitations](#limitations)
@@ -34,6 +35,7 @@ The Pickle Parser package bridges the gap between business-readable Gherkin scen
 - 🎨 **Gesture Support**: Swipe, scroll, refresh, and custom gestures
 - 📖 **Clear Error Messages**: Detailed logging and error reporting
 - 🛠️ **CLI Tools**: Validate feature files and generate test skeletons
+- 🔧 **Custom Steps**: Register your own step implementations for app-specific actions
 
 ## 📦 Installation
 
@@ -43,7 +45,7 @@ Add `pickle_parser` to your `pubspec.yaml` file:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  pickle_parser: ^1.0.3
+  pickle_parser: ^1.1.0
 ```
 
 Then run:
@@ -175,8 +177,6 @@ $ dart run pickle_parser:cli --generate --verbose
   4. Run: flutter test test/generated
 ```
 
-````
-
 ## 🔗 Dependencies
 
 ### Required Dependencies
@@ -204,7 +204,7 @@ flutter:
   assets:
     - assets/features/
     - test/features/
-````
+```
 
 ## 🚀 Quick Start
 
@@ -325,596 +325,281 @@ Then I see icon:check
 
 - `add`, `delete`, `close`, `menu`
 
-## 📚 Complete Step Reference
+## 🔧 Custom Steps
 
-### 👁️ Visibility Assertions
+The package supports registering custom step implementations for app-specific actions. This allows you to extend the built-in step library with your own business logic.
 
-#### Positive Assertions
+### How Custom Steps Work
 
-```gherkin
-# Check if element is visible
-When I see [element]
-Then I see [element]
-When I can see [element]  # Alternative syntax
+1. **Priority**: Custom steps are checked first, before built-in implementations
+2. **Fallback**: If a custom step returns `false` or throws an error, built-in steps are tried
+3. **Flexibility**: Support for exact matching, regex patterns, and templates
 
-# Examples
-When I see Login Button
-Then I see key:welcome_message
-When I can see type:AppBar
-```
+### Registration Methods
 
-#### Negative Assertions
+#### Exact Text Matching
 
-```gherkin
-# Check if element is NOT visible
-When I do not see [element]
-When I don't see [element]
-Then I do not see [element]
-Then I don't see [element]
-
-# Examples
-Then I do not see Error Message
-When I don't see key:loading_spinner
-```
-
-### 🖱️ Touch Interactions
-
-#### Basic Tap
-
-```gherkin
-When I tap [element]
-
-# Examples
-When I tap Submit
-When I tap key:login_button
-When I tap type:ElevatedButton
-When I tap icon:add
-```
-
-#### Long Press
-
-```gherkin
-When I long press [element]
-
-# Examples
-When I long press Delete Item
-When I long press key:context_menu
-When I long press type:ListTile
-```
-
-#### Double Tap
-
-```gherkin
-When I double tap [element]
-
-# Examples
-When I double tap Favorite
-When I double tap key:heart_icon
-When I double tap type:Image
-```
-
-### ⌨️ Text Input
-
-#### Enter Text (Multiple Formats)
-
-```gherkin
-# Format 1: With field specification
-When I enter [text] in field with key:[key]
-When I enter [text] in field with type:[type]
-
-# Format 2: Into element
-When I enter [text] into [element]
-
-# Examples
-When I enter hello@example.com in field with key:email_field
-When I enter password123 in field with type:TextField
-When I enter Search term into key:search_box
-When I enter John Doe into type:TextFormField
-```
-
-#### Clear Field
-
-```gherkin
-When I clear field [element]
-
-# Examples
-When I clear field key:username
-When I clear field type:TextField
-```
-
-#### Field Content Validation
-
-```gherkin
-When field [element] contains [text]
-Then field [element] contains [text]
-
-# Examples
-Then field key:email_field contains john@example.com
-When field type:TextField contains Expected Text
-```
-
-### 🎯 Gesture Interactions
-
-#### Swipe
-
-```gherkin
-# Screen swipe
-When I swipe [direction]
-
-# Element-specific swipe
-When I swipe [direction] on [element]
-
-# Directions: left, right, up, down
-# Examples
-When I swipe left
-When I swipe right on key:card_widget
-When I swipe up on type:ListView
-```
-
-#### Scroll
-
-```gherkin
-# Basic scroll
-When I scroll [direction]
-
-# Scroll until element is visible
-When I scroll until I see [element]
-
-# Examples
-When I scroll up
-When I scroll down
-When I scroll until I see Load More
-When I scroll until I see key:bottom_item
-```
-
-#### Pull to Refresh
-
-```gherkin
-When I refresh
-
-# Example
-When I refresh
-Then I see Updated Content
-```
-
-### ⏱️ Wait and Timing
-
-#### Time-based Wait
-
-```gherkin
-When I wait for [seconds]
-
-# Examples
-When I wait for 2
-When I wait for 5
-```
-
-#### Conditional Wait
-
-```gherkin
-When I wait until I see [element]
-
-# Examples
-When I wait until I see Loading Complete
-When I wait until I see key:success_dialog
-When I wait until I see type:SnackBar
-```
-
-#### Manual Pump
-
-```gherkin
-When I pump [count]
-
-# Examples
-When I pump 1
-When I pump 5
-```
-
-#### Settle Animation
-
-```gherkin
-When I settle
-Then I settle
-
-# Wait for all animations to complete
-When I settle
-```
-
-### ⌨️ Keyboard Interactions
-
-#### Key Press
-
-```gherkin
-When I press [key]
-When I trigger [key]  # Alternative for enter
-
-# Supported keys: enter, escape, space, tab, backspace
-# Examples
-When I press enter
-When I press escape
-When I trigger enter  # Same as pressing enter
-```
-
-### 🧭 Navigation
-
-#### Back Navigation
-
-```gherkin
-When I navigate back
-When I go back
-
-# Examples
-When I navigate back
-Then I see Previous Screen
-```
-
-#### Dismiss Dialogs/Overlays
-
-```gherkin
-When I dismiss [element]
-
-# Auto-detects common dismiss buttons: Dismiss, Close, OK
-# Examples
-When I dismiss dialog
-When I dismiss key:popup_menu
-When I dismiss type:AlertDialog
-```
-
-## 💡 Usage Examples
-
-### Complete Login Flow
-
-```gherkin
-Feature: User Authentication
-
-  Scenario: Successful login and navigation
-    # Setup
-    Given I am on the login screen
-
-    # Input credentials
-    When I enter test@example.com in field with key:email_input
-    When I enter secretpass in field with key:password_input
-
-    # Submit form
-    When I tap key:login_submit
-    When I settle
-
-    # Verify success
-    Then I see Welcome back!
-    Then I do not see Invalid credentials
-    Then I see type:BottomNavigationBar
-
-    # Navigate to profile
-    When I tap Profile
-    Then I see My Profile
-```
-
-### E-commerce Product Search
-
-```gherkin
-Feature: Product Search
-
-  Scenario: Search and filter products
-    # Search for products
-    When I tap key:search_field
-    When I enter smartphone into key:search_field
-    When I press enter
-    When I settle
-
-    # Verify results
-    Then I see Search Results
-    Then I see type:ListView
-
-    # Apply filters
-    When I tap Filters
-    When I tap Price: Low to High
-    When I tap Apply
-    When I settle
-
-    # Verify filtered results
-    Then I see Sorted Results
-    Then I do not see No results found
-```
-
-### Enhanced Text Matching
-
-```gherkin
-Feature: Advanced Text Matching
-
-  Scenario: Using flexible text selectors
-    # Exact match (default behavior)
-    When I see Login Button
-
-    # Partial text matching
-    When I tap contains:Submit
-    Then I see contains:Success
-
-    # Prefix matching
-    When I see startsWith:Welcome
-
-    # Suffix matching
-    Then I see endsWith:completed
-
-    # Regex pattern matching
-    When I see regex:^Error.*occurred$
-    Then I see regex:\d+ items? found
-
-    # Explicit exact match
-    When I tap text:Exact Button Text
-```
-
-### Form Validation
-
-```gherkin
-Feature: Contact Form
-
-  Scenario: Form validation and submission
-    # Fill form with invalid data
-    When I enter invalid-email in field with key:email_field
-    When I enter x in field with key:name_field
-    When I tap Submit
-
-    # Check validation errors
-    Then I see Please enter a valid email
-    Then I see Name must be at least 2 characters
-
-    # Fix errors
-    When I clear field key:email_field
-    When I enter valid@email.com in field with key:email_field
-    When I clear field key:name_field
-    When I enter John Doe in field with key:name_field
-
-    # Submit successfully
-    When I tap Submit
-    When I settle
-    Then I see Thank you for your message
-    Then I do not see Please enter a valid email
-```
-
-## ⚠️ Limitations
-
-### Current Limitations
-
-1. **Limited Icon Support**: Only supports `add`, `delete`, `close`, `menu` icons
-2. **Single Element Finding**: Steps target the first matching element
-3. **No Parameter Substitution**: Variables/parameters not supported in steps
-4. **Asset Loading Only**: Feature files must be in app assets (not external files)
-5. **No Custom Steps**: Cannot define custom step implementations
-6. **Flutter Dependencies**: Requires Flutter test environment
-
-### Widget Support Limitations
-
-- Custom widgets require `key:` or `type:` selectors
-- Complex widget hierarchies may need specific targeting
-- Some widget states (disabled, loading) not explicitly supported
-
-### Timing Limitations
-
-- Fixed timeout durations (30 seconds for `pumpUntilFound`)
-- No dynamic timeout configuration
-- Animation timing depends on Flutter's `pumpAndSettle`
-
-### ✅ Improvements Made
-
-- ✅ **Enhanced Text Matching**: Added support for contains, startsWith, endsWith, and regex patterns
-- ✅ **CLI Validation**: Feature files can now be validated before testing
-- ✅ **Test Generation**: Automatic test skeleton generation from feature files
-- ✅ **Better Error Messages**: More specific error reporting and validation
-
-## 📋 Best Practices
-
-### 1. Widget Keys
-
-Always add keys to important widgets for reliable targeting:
+Register a step handler for exact text matches:
 
 ```dart
-ElevatedButton(
-  key: Key('submit_button'),
-  onPressed: () => {},
-  child: Text('Submit'),
-)
+import 'package:pickle_parser/pickle_parser.dart';
+
+// Register before running tests
+registerCustomStep(
+  'I login with default credentials',
+  (step, tester) async {
+    await tester.enterText(find.byKey(Key('username')), 'test@example.com');
+    await tester.enterText(find.byKey(Key('password')), 'password123');
+    await tester.tap(find.byKey(Key('login_button')));
+    await tester.pumpAndSettle();
+    return true; // Step handled successfully
+  },
+);
 ```
 
-### 2. Descriptive Step Names
+#### Pattern Matching with Regex
 
-Use clear, descriptive step names:
+Register steps that match regex patterns:
+
+```dart
+registerCustomStepPattern(
+  RegExp(r'I wait for (\d+) milliseconds'),
+  (step, tester) async {
+    final match = RegExp(r'I wait for (\d+) milliseconds').firstMatch(step);
+    if (match != null) {
+      final ms = int.parse(match.group(1)!);
+      await tester.pump(Duration(milliseconds: ms));
+      return true;
+    }
+    return false;
+  },
+);
+```
+
+#### Template Matching
+
+Register steps using simple templates with placeholders:
+
+```dart
+registerCustomStepTemplate(
+  'I wait for {} seconds and then tap {}',
+  (step, tester) async {
+    // Parse step manually to extract values
+    final parts = step.split(' ');
+    final seconds = int.parse(parts[3]);
+    final elementKey = parts[7];
+
+    await Future.delayed(Duration(seconds: seconds));
+    await tester.tap(find.byKey(Key(elementKey)));
+    return true;
+  },
+);
+```
+
+### Advanced Custom Steps
+
+#### Complex Business Logic
+
+```dart
+registerCustomStep(
+  'I complete the checkout process',
+  (step, tester) async {
+    // Multi-step business process
+    await tester.enterText(find.byKey(Key('credit_card')), '4111111111111111');
+    await tester.enterText(find.byKey(Key('expiry')), '12/25');
+    await tester.enterText(find.byKey(Key('cvv')), '123');
+
+    await tester.tap(find.byKey(Key('submit_payment')));
+    await tester.pumpAndSettle();
+
+    // Verify success
+    expect(find.text('Payment Successful'), findsOneWidget);
+    return true;
+  },
+);
+```
+
+#### Custom Assertions
+
+```dart
+registerCustomStepPattern(
+  RegExp(r'I verify that (.+) contains (.+)'),
+  (step, tester) async {
+    final match = RegExp(r'I verify that (.+) contains (.+)').firstMatch(step);
+    if (match != null) {
+      final elementName = match.group(1)!;
+      final expectedText = match.group(2)!;
+
+      Finder finder = elementName.startsWith('key:')
+          ? find.byKey(Key(elementName.substring(4)))
+          : find.text(elementName);
+
+      final widget = tester.widget(finder);
+      String actualText = '';
+
+      if (widget is Text) {
+        actualText = widget.data ?? '';
+      } else if (widget is TextField) {
+        actualText = (widget as dynamic).controller?.text ?? '';
+      }
+
+      if (!actualText.contains(expectedText)) {
+        throw TestFailure('Text "$actualText" does not contain "$expectedText"');
+      }
+
+      return true;
+    }
+    return false;
+  },
+);
+```
+
+### Using the Registry Directly
+
+For more control, use the `CustomStepRegistry` directly:
+
+```dart
+void setupCustomSteps() {
+  final registry = CustomStepRegistry();
+
+  // Register multiple patterns
+  registry.registerPattern(RegExp(r'I scroll to (.+)'), myScrollHandler);
+  registry.registerExact('I perform cleanup', myCleanupHandler);
+
+  // Check registration
+  print('Registered ${registry.handlerCount} custom steps');
+
+  // Clear all (useful for testing)
+  registry.clear();
+}
+```
+
+### Custom Step Handler Signature
+
+```dart
+typedef CustomStepHandler = Future<bool> Function(String step, WidgetTester tester);
+```
+
+**Parameters:**
+
+- `step`: The full step text including Gherkin keyword
+- `tester`: The `WidgetTester` instance for widget interactions
+
+**Return Value:**
+
+- `true`: Step was handled successfully
+- `false`: Step couldn't be handled, try built-in steps
+- `Exception`: Step failed with error
+
+### Best Practices
+
+#### 1. Return `false` for Unhandled Cases
+
+```dart
+registerCustomStepPattern(
+  RegExp(r'I wait for (\d+) seconds'),
+  (step, tester) async {
+    final match = RegExp(r'I wait for (\d+) seconds').firstMatch(step);
+    if (match == null) {
+      return false; // Let built-in handlers try
+    }
+
+    final seconds = int.tryParse(match.group(1)!);
+    if (seconds == null) {
+      return false; // Invalid format, let others handle
+    }
+
+    await Future.delayed(Duration(seconds: seconds));
+    return true;
+  },
+);
+```
+
+#### 2. Use Descriptive Step Names
+
+```dart
+// Good - clear and specific
+registerCustomStep('I login as admin user', adminLoginHandler);
+registerCustomStep('I verify shopping cart total', cartTotalHandler);
+
+// Avoid - too generic
+registerCustomStep('I do something', genericHandler);
+```
+
+#### 3. Setup in Test Suite
+
+```dart
+void main() {
+  setUpAll(() {
+    // Register custom steps before all tests
+    registerCustomStep('I setup test data', setupTestDataHandler);
+    registerCustomStep('I cleanup test data', cleanupTestDataHandler);
+  });
+
+  tearDownAll(() {
+    // Clean up if needed
+    CustomStepRegistry().clear();
+  });
+
+  testWidgets('My test', (tester) async {
+    // Use custom steps in feature files or directly
+    await getCucumberStepTestCode('When I setup test data', tester);
+    // ... test logic ...
+    await getCucumberStepTestCode('When I cleanup test data', tester);
+  });
+}
+```
+
+#### 4. Error Handling
+
+```dart
+registerCustomStep(
+  'I verify complex state',
+  (step, tester) async {
+    try {
+      // Complex verification logic
+      await verifyComplexState(tester);
+      return true;
+    } catch (e) {
+      // Log error and let built-in steps try, or rethrow if critical
+      print('Custom step failed: $e');
+      return false; // Or rethrow if you want the test to fail
+    }
+  },
+);
+```
+
+### Feature File Examples
+
+With custom steps registered, you can use them in feature files:
 
 ```gherkin
-# Good
-When I tap key:submit_order_button
-Then I see Order confirmation message
+Feature: Shopping Cart
 
-# Avoid
-When I tap button
-Then I see text
+  Scenario: Complete purchase
+    Given I am on the product page
+    When I add item to cart
+    And I login with default credentials          # Custom step
+    And I complete the checkout process           # Custom step
+    Then I verify that receipt contains "Success" # Custom step
+    And I cleanup test data                       # Custom step
 ```
 
-### 3. Wait Strategies
+### Custom Steps in CLI Validation
 
-Use appropriate wait strategies:
-
-```gherkin
-# For loading states
-When I wait until I see type:CircularProgressIndicator
-When I wait until I see Content loaded
-
-# For animations
-When I settle
-
-# For time-based operations
-When I wait for 3
-```
-
-### 4. Error Scenarios
-
-Test both positive and negative scenarios:
-
-```gherkin
-Scenario: Invalid login
-  When I enter wrong@email.com in field with key:email
-  When I enter wrongpass in field with key:password
-  When I tap key:login_button
-  Then I see Invalid credentials
-  Then I do not see Dashboard
-```
-
-### 5. Organize Feature Files
-
-Structure your feature files logically:
-
-```
-assets/features/
-├── authentication/
-│   ├── login.feature
-│   ├── signup.feature
-│   └── password_reset.feature
-├── shopping/
-│   ├── product_search.feature
-│   ├── cart.feature
-│   └── checkout.feature
-└── profile/
-    ├── edit_profile.feature
-    └── settings.feature
-```
-
-## 🐛 Troubleshooting
-
-### Common Issues
-
-#### Element Not Found
-
-```
-Error: No widget found with key:my_button
-```
-
-**Solutions:**
-
-- Verify the key exists in your widget
-- Use `When I wait until I see key:my_button` before interaction
-- Check if widget is in a different screen/state
-
-#### Timeout Errors
-
-```
-Error: Pump until has timed out
-```
-
-**Solutions:**
-
-- Increase wait time: `When I wait for 5`
-- Use `When I settle` for animations
-- Check if element actually appears
-
-#### Text Input Issues
-
-```
-Error: Unable to enter text in field
-```
-
-**Solutions:**
-
-- Ensure field is focusable and enabled
-- Use correct selector (key vs type)
-- Clear field before entering new text
-
-#### Step Not Recognized
-
-```
-Error: Unsupported text: my custom step
-```
-
-**Solutions:**
-
-- Check step syntax against documentation
-- Verify spelling and formatting
-- Use supported step patterns only
-- Run `dart run pickle_parser:cli --validate` to check feature files
-
-#### Enhanced Text Selector Issues
-
-```
-Error: No widget found with contains:partial text
-```
-
-**Solutions:**
-
-- Verify the text actually contains the substring
-- Use exact text matching if partial matching fails
-- Check for case sensitivity in text matching
-- Try different selector types (startsWith, endsWith, regex)
-
-### Debugging Tips
-
-1. **Add Logging Steps**:
-
-```gherkin
-When I settle
-# Add debugging visibility checks
-Then I see expected_element
-```
-
-2. **Use Type Selectors for Generic Widgets**:
-
-```gherkin
-# Instead of relying on text that might change
-When I tap type:ElevatedButton
-```
-
-3. **Break Down Complex Scenarios**:
-
-```gherkin
-# Split complex interactions
-When I tap Settings
-When I settle
-When I tap Profile
-When I settle
-Then I see Profile Settings
-```
-
-4. **Use Enhanced Text Matching**:
-
-```gherkin
-# Instead of relying on exact text that might change
-When I tap contains:Submit
-Then I see startsWith:Success
-```
-
-5. **Use CLI Validation**:
+The CLI tool recognizes custom steps when they are registered:
 
 ```bash
-# Validate your feature files before running tests
-dart run pickle_parser:cli --validate --verbose
+# Run validation with custom steps
+dart run pickle_parser:cli --validate
 
-# Generate skeleton tests to verify structure
-dart run pickle_parser:cli --generate --input assets/features --output test/validation
+# The validator will check:
+# 1. Built-in step patterns
+# 2. Registered custom step patterns
+# 3. Report any unmatched steps
 ```
 
-## 🤝 Contributing
-
-We welcome contributions! If you encounter issues or have suggestions:
-
-1. **Issues**: Create an issue on the [GitHub repository](https://github.com/robrob-creator/pickle_parser.git)
-2. **Pull Requests**: Submit PRs for bug fixes or new features
-3. **Feature Requests**: Suggest new Gherkin step patterns or widget support
-
-### Development Setup
-
-```bash
-# Clone the repository
-git clone https://github.com/robrob-creator/pickle_parser.git
-
-# Install dependencies
-flutter pub get
-
-# Run tests
-flutter test
-```
-
-## ☕ Support This Project
-
-If you find this package helpful and want to support its development, consider buying me a coffee! Your support helps maintain and improve this open-source project.
-
-[![Buy Me A Coffee](https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png)](https://www.buymeacoffee.com/robertcumahig)
+**Note**: For CLI validation to recognize custom steps, you need to register them in a setup file that the CLI can access.
 
 ## 📄 License
 
