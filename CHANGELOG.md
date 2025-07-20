@@ -1,4 +1,12 @@
-## 1.1.0
+## 1.1.2
+
+### Improvements
+
+- 📖 **Documentation**: Restored Buy Me a Coffee support section
+- 🏷️ **Package Metadata**: Added comprehensive topics for better discoverability
+  - testing, cucumber, gherkin, bdd, widget-testing, automation, flutter-testing, pickle, test-automation, behavior-driven-development
+
+## 1.1.1
 
 ### Major New Features
 
