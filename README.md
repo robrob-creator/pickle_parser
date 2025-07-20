@@ -601,6 +601,12 @@ dart run pickle_parser:cli --validate
 
 **Note**: For CLI validation to recognize custom steps, you need to register them in a setup file that the CLI can access.
 
+## ☕ Support This Project
+
+If you find this package helpful and want to support its development, consider buying me a coffee! Your support helps maintain and improve this open-source project.
+
+[![Buy Me A Coffee](https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png)](https://buymeacoffee.com/robmoonshoz)
+
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
